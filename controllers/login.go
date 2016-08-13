@@ -10,6 +10,14 @@ type LoginController struct {
 	beego.Controller
 }
 
+func (c *LoginController) Prepare() {
+	uname, ok := c.GetSecureCookie("panzer", "uname")
+	if !ok {
+		c.Data["uname"] = ""
+	} else {
+		c.Data["uname"] = uname
+	}
+}
 func (c *LoginController) Get() {
 	c.TplName = "login.html"
 	c.Data["title"] = "登录"
