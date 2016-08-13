@@ -1,0 +1,9 @@
+{{template "header.html" .}}
+{{if .blogs}}
+<ul class="list-group">
+    {{range $blog := .blogs}}
+    <li class="list-group-item"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></li>
+    {{end}}
+</ul>
+{{end}}
+{{template "footer.html" .}}
