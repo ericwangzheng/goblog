@@ -5,7 +5,6 @@ import (
 	"goblog/models"
 	"github.com/astaxie/beego/orm"
 	"strconv"
-	"html/template"
 )
 
 type Default struct {
@@ -26,17 +25,7 @@ func (c *Default) Index() {
 	models.Index()
 	c.Data["blogs"] = models.Articles
 }
-func (c *Default) Create() {
-	c.TplName = "create.html"
-	c.Data["title"] = "写文章"
-	c.Data["xsrf"] = template.HTML(c.XSRFFormHTML())
-}
-func (c *Default) Insert() {
-	a := models.Article{}
-	c.ParseForm(&a)
-	models.Insert(a)
-	c.Redirect("/", 302)
-}
+
 func (c *Default) Show() {
 	id := c.Ctx.Input.Param(":id")
 	i, err := strconv.Atoi(id)
@@ -50,4 +39,5 @@ func (c *Default) Show() {
 	c.TplName = "article.html"
 	c.Data["article"] = article
 	c.Data["title"] = "文章详情"
+	c.Data["id"]=id
 }

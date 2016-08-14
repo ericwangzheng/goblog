@@ -2,5 +2,8 @@
 {{if .article}}
 <h4>{{.article.Title}}</h4>
 <pre><code>{{.article.Content}}</code></pre>
+{{if ne .uname ""}}
+<a href="/admin/edit/{{.id}}">edit</a>
+{{end}}
 {{end}}
 {{template "footer.html" .}}
