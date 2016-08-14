@@ -1,3 +1,4 @@
 goblog
 database.sqlite
 .idea
+.fuse*

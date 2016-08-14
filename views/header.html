@@ -26,7 +26,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {{if eq .uname ""}}
                 <li>
-                    <a href="/login"><button type="button" class="btn btn-default navbar-btn">登录</button></a>
+                    <a href="/login">登录</a>
                 </li>
                 {{else}}
                 <li class="dropdown">
@@ -34,6 +34,7 @@
                        aria-expanded="false">{{.uname}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="/create">写文章</a></li>
+                        <li><a href="/logout">Logout</a></li>
                     </ul>
                 </li>
                 {{end}}

@@ -39,3 +39,7 @@ func (c *LoginController) Post() {
 		c.Redirect("/login?errmsg=upassiswrong", 302)
 	}
 }
+func (c *LoginController) Logout() {
+	c.Ctx.SetCookie("uname", "", -1)
+	c.Redirect("/login", 302)
+}
