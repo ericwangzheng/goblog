@@ -1,8 +1,11 @@
 {{template "header.html" .}}
 {{if .article}}
-<h4>{{.article.Title}}</h4>
-<pre><code>{{.article.Content}}</code></pre>
+<h3>{{.article.Title}}</h3>
+<p>Author:{{.article.Author}} {{date .article.Time "Y-m-d H:i:s"}}</p>
+<hr>
+{{.content}}
 {{if ne .uname ""}}
+<hr>
 <a href="/admin/edit/{{.id}}">edit</a>
 {{end}}
 {{end}}

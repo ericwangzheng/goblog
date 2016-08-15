@@ -2,7 +2,12 @@
 {{if .blogs}}
 <ul class="list-group">
     {{range $blog := .blogs}}
-    <li class="list-group-item"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></li>
+    <div class="media">
+        <div class="media-body">
+            <h3 class="media-heading"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></h3>
+            {{$blog.Content}}
+        </div>
+    </div>
     {{end}}
 </ul>
 {{end}}

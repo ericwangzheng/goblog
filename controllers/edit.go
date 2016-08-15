@@ -30,6 +30,7 @@ func (c *EditController) Create() {
 func (c *EditController) Add() {
 	a := models.Article{}
 	c.ParseForm(&a)
+	a.Author, _ = c.GetSecureCookie("panzer", "uname")
 	models.Insert(&a)
 	i := strconv.Itoa(a.Id)
 	c.Redirect("/" + i, 302)
@@ -54,4 +55,7 @@ func (c *EditController) Update() {
 	a.Id = id
 	models.Update(&a)
 	c.Redirect("/" + i, 302)
+}
+func (c *EditController)Delete() {
+
 }

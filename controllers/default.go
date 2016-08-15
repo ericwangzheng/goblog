@@ -5,6 +5,7 @@ import (
 	"goblog/models"
 	"github.com/astaxie/beego/orm"
 	"strconv"
+	"html/template"
 )
 
 type Default struct {
@@ -38,6 +39,7 @@ func (c *Default) Show() {
 	}
 	c.TplName = "article.html"
 	c.Data["article"] = article
-	c.Data["title"] = "文章详情"
-	c.Data["id"]=id
+	c.Data["title"] = article.Title
+	c.Data["content"] = template.HTML(article.Content)
+	c.Data["id"] = id
 }

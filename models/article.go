@@ -2,12 +2,15 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 //定义结构体，名字为表名大写，字段大写，为表的字段
 type Article struct {
-	Id      int `orm:"pk;auto"` //主键，自动增长
+	Id      int       `orm:"pk;auto"` //主键，自动增长
 	Title   string
-	Content string
+	Content string    `orm:"type(text)"`
+	Author  string
+	Time    time.Time `orm:"auto_now_add"`
 }
 
 var Articles []*Article
@@ -34,7 +37,7 @@ func Update(article *Article) error {
 	i := Article{Id:article.Id}
 	err := o.Read(&i)
 	if err == nil {
-		_, err := o.Update(article)
+		_, err := o.Update(article,"Title","Content")
 		return err
 	}
 	return err

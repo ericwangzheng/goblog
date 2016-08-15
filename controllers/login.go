@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"goblog/models"
 	"html/template"
+	"crypto/sha256"
+	"fmt"
 )
 
 type LoginController struct {
@@ -32,7 +34,9 @@ func (c *LoginController) Post() {
 	if upass == "" {
 		c.Redirect("/login?errmsg=upassisnull", 302)
 	}
-	if upass == c.GetString("upass") {
+	p := []byte(c.GetString("upass"))
+	pass := fmt.Sprintf("%x", sha256.Sum256(p))
+	if upass == pass {
 		c.SetSecureCookie("panzer", "uname", uname)
 		c.Redirect("/", 302)
 	} else {
