@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"strconv"
 	"html/template"
+	"time"
 )
 
 type Default struct {
@@ -25,6 +26,13 @@ func (c *Default) Index() {
 	c.TplName = "index.html"
 	models.Index()
 	c.Data["blogs"] = models.Articles
+
+	tagcount_map := make(map[string]int64)
+	all := models.ReadALLtag()
+	for _, tag := range all {
+		tagcount_map[tag.Name] = models.ReadCountByName(tag.Name)
+	}
+	c.Data["tagcount"] = tagcount_map
 }
 
 func (c *Default) Show() {
@@ -37,9 +45,12 @@ func (c *Default) Show() {
 	if err == orm.ErrNoRows {
 		c.Redirect("/", 302)
 	}
+	rpc, _ := time.LoadLocation("PRC")
+	article.Time = article.Time.In(rpc)
 	c.TplName = "article.html"
 	c.Data["article"] = article
 	c.Data["title"] = article.Title
 	c.Data["content"] = template.HTML(article.Content)
 	c.Data["id"] = id
+	c.Data["tag"] = models.ReadtagByid(i)
 }

@@ -1,5 +1,4 @@
 {{template "header.html" .}}
-
 <form id="Article" action="" method="post">
     {{.xsrf}}
     <div class="form-group">
@@ -8,7 +7,26 @@
     </div>
     <div class="form-group">
         <label for="mytextarea">Content</label>
-        <textarea class="form-control" rows="15" id="mytextarea" name="Content" required>{{.article.Content}}</textarea>
+        <textarea class="form-control" rows="20" id="mytextarea" name="Content" required>{{.article.Content}}</textarea>
+    </div>
+    <div class="form-group">
+        {{if .tagshas}}
+        {{range $taghas := .tagshas}}
+        <label for="{{$taghas.Name}}" class="checkbox-inline">
+            <input type="checkbox" id="{{$taghas.Name}}" value="{{$taghas.Name}}" name="tag" checked>{{$taghas.Name}}
+        </label>
+        {{end}}
+        {{end}}
+
+        {{range $tagnohas := .tagsnohas}}
+        <label for="{{$tagnohas.Name}}" class="checkbox-inline">
+            <input type="checkbox" id="{{$tagnohas.Name}}" value="{{$tagnohas.Name}}" name="tag">{{$tagnohas.Name}}
+        </label>
+        {{end}}
+    </div>
+    <div class="form-group">
+        <label for="tag">或添加新标签 , 多个之间用竖线(|)隔开</label>
+        <input type="text" class="form-control" id="tag" name="addtag">
     </div>
     <button type="submit" class="btn btn-default">提交</button>
 </form>

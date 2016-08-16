@@ -12,27 +12,20 @@ type LoginController struct {
 	beego.Controller
 }
 
-func (c *LoginController) Prepare() {
-	uname, ok := c.GetSecureCookie("panzer", "uname")
-	if !ok {
-		c.Data["uname"] = ""
-	} else {
-		c.Data["uname"] = uname
-	}
-}
 func (c *LoginController) Get() {
 	c.TplName = "login.html"
 	c.Data["title"] = "登录"
 	c.Data["xsrf"] = template.HTML(c.XSRFFormHTML())
+	c.Data["uname"] = ""
 }
 func (c *LoginController) Post() {
 	uname := c.GetString("uname")
 	if uname == "" {
-		c.Redirect("/login?errmsg=unameisnull", 302)
+		c.Redirect("/login?errmsg=nameisnull", 302)
 	}
 	upass := models.ReadUser(uname)
 	if upass == "" {
-		c.Redirect("/login?errmsg=upassisnull", 302)
+		c.Redirect("/login?errmsg=passisnull", 302)
 	}
 	p := []byte(c.GetString("upass"))
 	pass := fmt.Sprintf("%x", sha256.Sum256(p))
@@ -40,7 +33,7 @@ func (c *LoginController) Post() {
 		c.SetSecureCookie("panzer", "uname", uname)
 		c.Redirect("/", 302)
 	} else {
-		c.Redirect("/login?errmsg=upassiswrong", 302)
+		c.Redirect("/login?errmsg=passiswrong", 302)
 	}
 }
 func (c *LoginController) Logout() {

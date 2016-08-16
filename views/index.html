@@ -1,14 +1,25 @@
 {{template "header.html" .}}
 {{if .blogs}}
-<ul class="list-group">
-    {{range $blog := .blogs}}
-    <div class="media">
-        <div class="media-body">
-            <h3 class="media-heading"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></h3>
-            {{$blog.Content}}
-        </div>
+<div class="row">
+    <div class="col-xs-12 col-sm-8">
+        <ul class="list-group">
+            {{range $blog := .blogs}}
+            <div class="media">
+                <div class="media-body">
+                    <h3 class="media-heading"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></h3>
+                    {{substr $blog.Content 0 120}}
+                </div>
+            </div>
+            {{end}}
+        </ul>
     </div>
-    {{end}}
-</ul>
+    <div class="col-xs-12 col-sm-4">
+        {{range $key,$count := .tagcount}}
+        <button class="btn btn-success" type="button">
+             {{$key}} <span class="badge">{{$count}}</span>
+        </button>
+        {{end}}
+    </div>
+</div>
 {{end}}
 {{template "footer.html" .}}

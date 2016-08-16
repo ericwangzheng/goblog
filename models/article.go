@@ -37,7 +37,7 @@ func Update(article *Article) error {
 	i := Article{Id:article.Id}
 	err := o.Read(&i)
 	if err == nil {
-		_, err := o.Update(article,"Title","Content")
+		_, err := o.Update(article, "Title", "Content")
 		return err
 	}
 	return err

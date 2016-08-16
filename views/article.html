@@ -1,12 +1,15 @@
 {{template "header.html" .}}
 {{if .article}}
 <h3>{{.article.Title}}</h3>
-<p>Author:{{.article.Author}} {{date .article.Time "Y-m-d H:i:s"}}</p>
+<p>作者: {{.article.Author}} ● {{dateformat .article.Time "2006-01-02 15:04:05"}} ●
+    {{range $tag:= .tag}}
+    <a href="/tag/{{$tag.Name}}"><button type="button" class="btn btn-success btn-xs">{{$tag.Name}}</button></a>
+    {{end}}●
+    <a href="/admin/edit/{{.id}}"> 编辑 </a>
+</p>
 <hr>
 {{.content}}
 {{if ne .uname ""}}
-<hr>
-<a href="/admin/edit/{{.id}}">edit</a>
 {{end}}
 {{end}}
 {{template "footer.html" .}}
