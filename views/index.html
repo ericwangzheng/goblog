@@ -21,14 +21,16 @@
         </ul>
         {{end}}
     </div>
-    <div class="col-xs-12 col-sm-4">标签：
-        <hr>
+    <div class="col-xs-12 col-sm-4">
+        {{if .tagcount}}
+        标签：<hr>
         {{range $key,$count := .tagcount}}
         <a href="/tag/{{$key}}">
             <button class="btn btn-success" type="button">
                 {{$key}} <span class="badge">{{$count}}</span>
             </button>
         </a>
+        {{end}}
         {{end}}
     </div>
 </div>
