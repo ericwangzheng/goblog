@@ -64,4 +64,6 @@ func (c *Default) ReadArticleByID() {
 	models.ShowArticlesByids(idsint)
 	c.TplName = "index.html"
 	c.Data["blogs"] = models.Articles
+	c.Data["tag"] = tag
+	c.Data["title"]="打有 \"" + tag + "\" 标签的文章"
 }

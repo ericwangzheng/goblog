@@ -1,17 +1,22 @@
 {{template "header.html" .}}
-{{if .blogs}}
+
 <div class="row">
     <div class="col-xs-12 col-sm-8">
+        {{if .tag}}
+        <h4>打有 " {{.tag}} " 标签的文章 :</h4><br>
+        {{end}}
+        {{if .blogs}}
         <ul class="list-group">
             {{range $blog := .blogs}}
             <div class="media">
                 <div class="media-body">
                     <h3 class="media-heading"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></h3>
-                    {{substr $blog.Content 0 120}}
+                    {{substr $blog.Content 0 120 | replace}}
                 </div>
             </div>
             {{end}}
         </ul>
+        {{end}}
     </div>
     <div class="col-xs-12 col-sm-4">
         {{range $key,$count := .tagcount}}
@@ -23,5 +28,5 @@
         {{end}}
     </div>
 </div>
-{{end}}
+
 {{template "footer.html" .}}
