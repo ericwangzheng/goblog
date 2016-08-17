@@ -72,8 +72,7 @@ func (c *EditController) Update() {
 	c.Data["tagsnohas"] = models.ReadNohas(a)
 }
 func (c *EditController) DoUpdate() {
-	i := c.Ctx.Input.URL()
-	i = i[12:]
+	i := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(i)
 	a := models.Article{}
 	c.ParseForm(&a)

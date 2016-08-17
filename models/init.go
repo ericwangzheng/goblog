@@ -12,5 +12,4 @@ func init() {
 	orm.RegisterDataBase("default", "sqlite3", "database.sqlite")
 	orm.DefaultTimeLoc = time.UTC
 	orm.RunSyncdb("default", false, true)
-	orm.Debug = true
 }

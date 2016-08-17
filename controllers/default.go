@@ -30,7 +30,7 @@ func (c *Default) Index() {
 	tagcount_map := make(map[string]int64)
 	all := models.ReadALLtag()
 	for _, tag := range all {
-		tagcount_map[tag.Name] = models.ReadCountByName(tag.Name)
+		tagcount_map[tag.Name], _ = models.GetArticleIdBytag(tag.Name)
 	}
 	c.Data["tagcount"] = tagcount_map
 }
@@ -53,4 +53,15 @@ func (c *Default) Show() {
 	c.Data["content"] = template.HTML(article.Content)
 	c.Data["id"] = id
 	c.Data["tag"] = models.ReadtagByid(i)
+}
+func (c *Default) ReadArticleByID() {
+	tag := c.Ctx.Input.Param(":tag")
+	_, ids := models.GetArticleIdBytag(tag)
+	var idsint []int
+	for _, id := range ids {
+		idsint = append(idsint, id.Article_id)
+	}
+	models.ShowArticlesByids(idsint)
+	c.TplName = "index.html"
+	c.Data["blogs"] = models.Articles
 }

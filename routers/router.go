@@ -9,6 +9,7 @@ import (
 func init() {
 	beego.Router("/", &controllers.Default{}, "get:Index")
 	beego.Router("/:id([0-9]+)", &controllers.Default{}, "get:Show")
+	beego.Router("/tag/:tag", &controllers.Default{}, "get:ReadArticleByID")
 	beego.Router("/login", &controllers.LoginController{})
 	beego.Router("/logout", &controllers.LoginController{}, "get:Logout")
 

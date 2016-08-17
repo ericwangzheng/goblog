@@ -42,3 +42,7 @@ func Update(article *Article) error {
 	}
 	return err
 }
+func ShowArticlesByids(ids []int) {
+	o := orm.NewOrm()
+	o.QueryTable("Article").Filter("Id__in", ids).OrderBy("-Id").All(&Articles, "Id", "Title", "Content")
+}

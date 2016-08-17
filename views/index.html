@@ -15,9 +15,11 @@
     </div>
     <div class="col-xs-12 col-sm-4">
         {{range $key,$count := .tagcount}}
-        <button class="btn btn-success" type="button">
-             {{$key}} <span class="badge">{{$count}}</span>
-        </button>
+        <a href="/tag/{{$key}}">
+            <button class="btn btn-success" type="button">
+                {{$key}} <span class="badge">{{$count}}</span>
+            </button>
+        </a>
         {{end}}
     </div>
 </div>

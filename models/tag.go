@@ -26,9 +26,9 @@ func ReadtagByid(id int) []*Tag {
 func ReadNohas(taghas []*Tag) []*Tag {
 	o := orm.NewOrm()
 	var a []*Tag
-	qs:=o.QueryTable("tag")
-	for _,name := range taghas{
-	 	qs=qs.Exclude("Name", name.Name)
+	qs := o.QueryTable("tag")
+	for _, name := range taghas {
+		qs = qs.Exclude("Name", name.Name)
 	}
 	qs.Distinct().All(&a, "Name")
 	return a
@@ -41,8 +41,9 @@ func Deletetag(id int) {
 	o := orm.NewOrm()
 	o.Delete(&Tag{Article_id:id})
 }
-func ReadCountByName(name string) int64 {
+func GetArticleIdBytag(name string) (int64,[]*Tag) {
 	o := orm.NewOrm()
-	a, _ := o.QueryTable("tag").Filter("Name", name).Count()
-	return a
+	var tag  []*Tag
+	a, _ := o.QueryTable("tag").Filter("Name", name).Distinct().All(&tag, "Article_id")
+	return a,tag
 }
