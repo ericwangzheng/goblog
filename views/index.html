@@ -5,6 +5,9 @@
         {{if .tag}}
         <h4>打有 " {{.tag}} " 标签的文章 :</h4><br>
         {{end}}
+        {{if .search}}
+        <h4>搜索 " {{.search}} " 的结果 :</h4><br>
+        {{end}}
         {{if .blogs}}
         <ul class="list-group">
             {{range $blog := .blogs}}
@@ -18,7 +21,8 @@
         </ul>
         {{end}}
     </div>
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-4">标签：
+        <hr>
         {{range $key,$count := .tagcount}}
         <a href="/tag/{{$key}}">
             <button class="btn btn-success" type="button">

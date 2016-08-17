@@ -22,7 +22,7 @@ func Insert(a *Article) {
 
 func Index() {
 	o := orm.NewOrm()
-	o.QueryTable("article").All(&Articles)
+	o.QueryTable("article").OrderBy("-Id").All(&Articles)
 }
 
 func Show(id int) (Article, error) {
@@ -45,4 +45,8 @@ func Update(article *Article) error {
 func ShowArticlesByids(ids []int) {
 	o := orm.NewOrm()
 	o.QueryTable("Article").Filter("Id__in", ids).OrderBy("-Id").All(&Articles, "Id", "Title", "Content")
+}
+func Search(key string) {
+	o := orm.NewOrm()
+	o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&Articles, "Id", "Title", "Content")
 }

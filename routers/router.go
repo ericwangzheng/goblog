@@ -10,6 +10,7 @@ func init() {
 	beego.Router("/", &controllers.Default{}, "get:Index")
 	beego.Router("/:id([0-9]+)", &controllers.Default{}, "get:Show")
 	beego.Router("/tag/:tag", &controllers.Default{}, "get:ReadArticleByID")
+	beego.Router("/search", &controllers.Default{}, "get:Search")
 	beego.Router("/login", &controllers.LoginController{})
 	beego.Router("/logout", &controllers.LoginController{}, "get:Logout")
 
@@ -19,7 +20,7 @@ func init() {
 			ctx.Redirect(302, "/?event=alreadylogin")
 		}
 	}
-	beego.InsertFilter("/login",beego.BeforeExec,cantlogin)
+	beego.InsertFilter("/login", beego.BeforeExec, cantlogin)
 
 	var auth = func(ctx *context.Context) {
 		_, ok := ctx.GetSecureCookie("panzer", "uname")
@@ -32,7 +33,7 @@ func init() {
 			beego.NSBefore(auth),
 			beego.NSRouter("/create", &controllers.EditController{}, "get:Add;post:DoAdd"),
 			beego.NSRouter("/edit/:id([0-9]+)", &controllers.EditController{}, "get:Update;post:DoUpdate"),
-			beego.NSRouter("/changepass",&controllers.UserSetting{}),
+			beego.NSRouter("/changepass", &controllers.UserSetting{}),
 		)
 	//注册namespace
 	beego.AddNamespace(ns)

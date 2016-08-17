@@ -65,5 +65,16 @@ func (c *Default) ReadArticleByID() {
 	c.TplName = "index.html"
 	c.Data["blogs"] = models.Articles
 	c.Data["tag"] = tag
-	c.Data["title"]="打有 \"" + tag + "\" 标签的文章"
+	c.Data["title"] = "打有 \"" + tag + "\" 标签的文章"
+}
+func (c *Default)Search() {
+	key := c.GetString("key")
+	if key == "" {
+		c.Redirect("/", 302)
+	}
+	models.Search(key)
+	c.TplName = "index.html"
+	c.Data["blogs"] = models.Articles
+	c.Data["search"] = key
+	c.Data["title"] = "搜索 \"" + key + "\" 的结果"
 }
