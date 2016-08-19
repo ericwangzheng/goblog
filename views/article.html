@@ -4,12 +4,29 @@
 <p>作者: {{.article.Author}} ● {{dateformat .article.Time "2006-01-02 15:04:05"}} ●
     {{range $tag:= .tag}}
     <a href="/tag/{{$tag.Name}}"><button type="button" class="btn btn-success btn-xs">{{$tag.Name}}</button></a>
-    {{end}}●
-    <a href="/admin/edit/{{.id}}"> 编辑 </a>
+    {{end}}
+    {{if ne .uname ""}}
+    ●<a href="/admin/edit/{{.id}}"> 编辑 </a>
+    ●<a href="/admin/delete/{{.id}}">删除</a>
+    {{end}}
 </p>
 <hr>
 {{.content}}
-{{if ne .uname ""}}
-{{end}}
+<!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="{{.id}}" data-title="{{.article.Title}}" data-url="http://blog.nsec.tk/{{.id}}"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"nsec"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
 {{end}}
 {{template "footer.html" .}}

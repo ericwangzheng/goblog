@@ -16,4 +16,3 @@ func main() {
 	beego.AddFuncMap("replace", replace)
 	beego.Run()
 }
-
