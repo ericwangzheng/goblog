@@ -2,3 +2,4 @@ goblog
 database.sqlite
 .idea
 .fuse*
+/static/upload

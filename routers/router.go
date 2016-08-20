@@ -33,6 +33,7 @@ func init() {
 			beego.NSBefore(auth),
 			beego.NSRouter("/create", &controllers.EditController{}, "get:Add;post:DoAdd"),
 			beego.NSRouter("/edit/:id([0-9]+)", &controllers.EditController{}, "get:Update;post:DoUpdate"),
+			beego.NSRouter("/edit/upload", &controllers.EditController{}, "post:Upload"),
 			beego.NSRouter("/changepass", &controllers.UserSetting{}),
 		)
 	//注册namespace

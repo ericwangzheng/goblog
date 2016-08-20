@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"github.com/astaxie/beego/orm"
 	"strings"
+	"fmt"
 )
 
 type EditController struct {
@@ -27,6 +28,7 @@ func (c *EditController) Add() {
 	c.Data["title"] = "写文章"
 	c.Data["xsrf"] = template.HTML(c.XSRFFormHTML())
 	c.Data["tagsnohas"] = models.ReadALLtag()
+	c.Data["xsrf_token"] = c.XSRFToken()
 }
 
 func (c *EditController) DoAdd() {
@@ -70,6 +72,7 @@ func (c *EditController) Update() {
 	a := models.ReadtagByid(id)
 	c.Data["tagshas"] = a
 	c.Data["tagsnohas"] = models.ReadNohas(a)
+	c.Data["xsrf_token"] = c.XSRFToken()
 }
 func (c *EditController) DoUpdate() {
 	i := c.Ctx.Input.Param(":id")
@@ -100,6 +103,17 @@ func (c *EditController) DoUpdate() {
 	models.Addtag(tags)
 
 	c.Redirect("/" + i, 302)
+}
+func (c *EditController)Upload() {
+	f, h, err := c.GetFile("uploadimg")
+	defer f.Close()
+	if err != nil {
+		a := fmt.Sprintf("%s", err)
+		c.Ctx.WriteString("error|" + a)
+	} else {
+		c.SaveToFile("uploadimg", "./static/upload/img/" + h.Filename)
+		c.Ctx.WriteString(c.Ctx.Input.Site() + ":" + strconv.Itoa(c.Ctx.Input.Port()) + "/static/upload/img/" + h.Filename)
+	}
 }
 func (c *EditController)Delete() {
 
