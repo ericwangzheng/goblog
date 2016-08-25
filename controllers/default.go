@@ -25,8 +25,8 @@ func (c *Default) Prepare() {
 func (c *Default) Index() {
 	c.Data["title"] = "nsec's Blog"
 	c.TplName = "index.html"
-	models.Index()
-	c.Data["blogs"] = models.Articles
+	articles := models.Index()
+	c.Data["blogs"] = articles
 
 	tagcount_map := make(map[string]int64)
 	all := models.ReadALLtag()
@@ -62,9 +62,9 @@ func (c *Default) ReadArticleByID() {
 	for _, id := range ids {
 		idsint = append(idsint, id.Article_id)
 	}
-	models.ShowArticlesByids(idsint)
+	articles := models.ShowArticlesByids(idsint)
 	c.TplName = "index.html"
-	c.Data["blogs"] = models.Articles
+	c.Data["blogs"] = articles
 	c.Data["tag"] = tag
 	c.Data["title"] = "打有 \"" + tag + "\" 标签的文章"
 }
@@ -74,9 +74,9 @@ func (c *Default)Search() {
 	if key == "" {
 		c.Redirect("/", 302)
 	}
-	models.Search(key)
+	articles := models.Search(key)
 	c.TplName = "index.html"
-	c.Data["blogs"] = models.Articles
+	c.Data["blogs"] = articles
 	c.Data["search"] = key
 	c.Data["title"] = "搜索 \"" + key + "\" 的结果"
 }

@@ -13,16 +13,16 @@ type Article struct {
 	Time    time.Time `orm:"auto_now_add"`
 }
 
-var Articles []*Article
-
 func Insert(a *Article) {
 	o := orm.NewOrm()
 	o.Insert(a)
 }
 
-func Index() {
+func Index() *[]*Article {
 	o := orm.NewOrm()
-	o.QueryTable("article").OrderBy("-Id").All(&Articles)
+	var articles []*Article
+	o.QueryTable("article").OrderBy("-Id").All(&articles)
+	return &articles
 }
 
 func Show(id int) (Article, error) {
@@ -42,11 +42,15 @@ func Update(article *Article) error {
 	}
 	return err
 }
-func ShowArticlesByids(ids []int) {
+func ShowArticlesByids(ids []int) *[]*Article {
+	var articles []*Article
 	o := orm.NewOrm()
-	o.QueryTable("Article").Filter("Id__in", ids).OrderBy("-Id").All(&Articles, "Id", "Title", "Content")
+	o.QueryTable("Article").Filter("Id__in", ids).OrderBy("-Id").All(&articles, "Id", "Title", "Content")
+	return &articles
 }
-func Search(key string) {
+func Search(key string) *[]*Article {
+	var articles []*Article
 	o := orm.NewOrm()
-	o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&Articles, "Id", "Title", "Content")
+	o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&articles, "Id", "Title", "Content")
+	return &articles
 }
