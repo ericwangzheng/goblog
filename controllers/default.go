@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"html/template"
 	"time"
+	"strings"
 )
 
 type Default struct {
@@ -69,6 +70,7 @@ func (c *Default) ReadArticleByID() {
 }
 func (c *Default)Search() {
 	key := c.GetString("key")
+	key = strings.TrimSpace(key)
 	if key == "" {
 		c.Redirect("/", 302)
 	}
