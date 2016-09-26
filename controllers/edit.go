@@ -56,8 +56,7 @@ func (c *EditController) DoAdd() {
 	}
 	models.Addtag(tags)
 
-	i := strconv.Itoa(a.Id)
-	c.Redirect("/" + i, 302)
+	c.Redirect(beego.URLFor("Default.Show", ":id", a.Id), 302)
 }
 func (c *EditController) Update() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
