@@ -45,7 +45,7 @@ func (c *Default) Show() {
 		c.Redirect("/", 302)
 	}
 	rpc, _ := time.LoadLocation("PRC")
-	article.Time = article.Time.In(rpc)
+	article.Create_time = article.Create_time.In(rpc)
 	c.TplName = "article.html"
 	c.Data["article"] = article
 	c.Data["title"] = article.Title

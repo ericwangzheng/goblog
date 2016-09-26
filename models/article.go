@@ -6,11 +6,12 @@ import (
 )
 //定义结构体，名字为表名大写，字段大写，为表的字段
 type Article struct {
-	Id      int       `orm:"pk;auto"` //主键，自动增长
-	Title   string
-	Content string    `orm:"type(text)"`
-	Author  string
-	Time    time.Time `orm:"auto_now_add"`
+	Id          int       `orm:"pk;auto"` //主键，自动增长
+	Title       string
+	Content     string    `orm:"type(text)"`
+	Author      string
+	Create_time time.Time `orm:"auto_now_add;type(datatime)"`
+	Update_time time.Time `orm:"auto_now;type(datatime)"`
 }
 
 func Insert(a *Article) {

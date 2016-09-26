@@ -2,12 +2,11 @@ package models
 
 import (
 	"github.com/astaxie/beego/orm"
-	"fmt"
 )
 
 //定义结构体，名字为表名大写，字段大写，为表的字段
 type Tag struct {
-	Id         int
+	Id         int       `orm:"pk;auto"` //主键，自动增长
 	Name       string
 	Article_id int
 }
@@ -40,9 +39,7 @@ func Addtag(tags []Tag) {
 }
 func Deletetag(id int) {
 	o := orm.NewOrm()
-	fmt.Println("aaaaaaaaaaa")
-	o.QueryTable("tag").Filter("article_id",id).Delete()
-	fmt.Println("aaaaaaaaaaa")
+	o.QueryTable("tag").Filter("article_id", id).Delete()
 }
 func GetArticleIdBytag(name string) (int64, []*Tag) {
 	o := orm.NewOrm()

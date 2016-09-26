@@ -1,5 +1,5 @@
 goblog
-database.sqlite
+*.sqlite
 .idea
 .fuse*
 /static/upload
