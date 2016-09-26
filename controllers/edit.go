@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"html/template"
-	"goblog/models"
+	"github.com/nsecgo/goblog/models"
 	"github.com/astaxie/beego"
 	"strconv"
 	"github.com/astaxie/beego/orm"
@@ -15,7 +15,7 @@ type EditController struct {
 }
 
 func (c *EditController) Prepare() {
-	uname, ok := c.GetSecureCookie("panzer", "uname")
+	uname, ok := c.GetSecureCookie(CookieSecret, "uname")
 	if !ok {
 		c.Data["uname"] = ""
 	} else {
@@ -34,7 +34,7 @@ func (c *EditController) Add() {
 func (c *EditController) DoAdd() {
 	a := models.Article{}
 	c.ParseForm(&a)
-	a.Author, _ = c.GetSecureCookie("panzer", "uname")
+	a.Author, _ = c.GetSecureCookie(CookieSecret, "uname")
 	a.Content = strings.Replace(a.Content, "<script>", "", -1)
 	a.Content = strings.Replace(a.Content, "</script>", "", -1)
 	models.Insert(&a)
@@ -70,13 +70,12 @@ func (c *EditController) Update() {
 	c.TplName = "create.html"
 	c.Data["title"] = "正在编辑--" + article.Title
 	a := models.ReadtagByid(id)
-	c.Data["tagshas"] = a
-	c.Data["tagsnohas"] = models.ReadNohas(a)
+	c.Data["tagshave"] = a
+	c.Data["tagsnohave"] = models.ReadNohas(a)
 	c.Data["xsrf_token"] = c.XSRFToken()
 }
 func (c *EditController) DoUpdate() {
-	i := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(i)
+	id, _ := c.GetInt(":id")
 	a := models.Article{}
 	c.ParseForm(&a)
 	a.Id = id
@@ -84,7 +83,6 @@ func (c *EditController) DoUpdate() {
 	a.Content = strings.Replace(a.Content, "</script>", "", -1)
 	models.Update(&a)
 	models.Deletetag(id)
-
 	var tags []models.Tag
 	addtag := strings.Split(c.GetString("addtag"), "|")
 	for _, name := range addtag {
@@ -102,7 +100,7 @@ func (c *EditController) DoUpdate() {
 	}
 	models.Addtag(tags)
 
-	c.Redirect("/" + i, 302)
+	c.Redirect(beego.URLFor("Default.Show", ":id", id), 302)
 }
 func (c *EditController)Upload() {
 	f, h, err := c.GetFile("uploadimg")

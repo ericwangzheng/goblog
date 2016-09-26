@@ -2,9 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"goblog/models"
+	"github.com/nsecgo/goblog/models"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"html/template"
 	"time"
 	"strings"
@@ -15,7 +14,7 @@ type Default struct {
 }
 
 func (c *Default) Prepare() {
-	uname, ok := c.GetSecureCookie("panzer", "uname")
+	uname, ok := c.GetSecureCookie(CookieSecret, "uname")
 	if !ok {
 		c.Data["uname"] = ""
 	} else {
@@ -37,12 +36,11 @@ func (c *Default) Index() {
 }
 
 func (c *Default) Show() {
-	id := c.Ctx.Input.Param(":id")
-	i, err := strconv.Atoi(id)
+	id, err := c.GetInt(":id")
 	if err != nil {
 		c.Redirect("/", 302)
 	}
-	article, err := models.Show(i)
+	article, err := models.Show(id)
 	if err == orm.ErrNoRows {
 		c.Redirect("/", 302)
 	}
@@ -53,7 +51,7 @@ func (c *Default) Show() {
 	c.Data["title"] = article.Title
 	c.Data["content"] = template.HTML(article.Content)
 	c.Data["id"] = id
-	c.Data["tag"] = models.ReadtagByid(i)
+	c.Data["tag"] = models.ReadtagByid(id)
 }
 func (c *Default) ReadArticleByID() {
 	tag := c.Ctx.Input.Param(":tag")

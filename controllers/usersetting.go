@@ -3,7 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"html/template"
-	"goblog/models"
+	"github.com/nsecgo/goblog/models"
 	"fmt"
 	"crypto/sha256"
 )
@@ -14,12 +14,12 @@ type UserSetting struct {
 
 func (c *UserSetting)Get() {
 	c.TplName = "usersetting.html"
-	c.Data["uname"], _ = c.GetSecureCookie("panzer", "uname")
+	c.Data["uname"], _ = c.GetSecureCookie(CookieSecret, "uname")
 	c.Data["title"] = "修改密码"
 	c.Data["xsrf"] = template.HTML(c.XSRFFormHTML())
 }
 func (c *UserSetting)Post() {
-	uname, _ := c.GetSecureCookie("panzer", "uname")
+	uname, _ := c.GetSecureCookie(CookieSecret, "uname")
 	upass := models.ReadUser(uname)
 	if upass != "" {
 		p := []byte(c.GetString("oldpass"))

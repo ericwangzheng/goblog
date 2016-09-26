@@ -13,7 +13,7 @@
             {{range $blog := .blogs}}
             <div class="media">
                 <div class="media-body">
-                    <h3 class="media-heading"><a href="/{{$blog.Id}}">{{$blog.Title}}</a></h3>
+                    <h3 class="media-heading"><a href="/articleid/{{$blog.Id}}">{{$blog.Title}}</a></h3>
                     {{substr $blog.Content 0 120 | replace}}
                 </div>
             </div>

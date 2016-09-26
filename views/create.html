@@ -10,17 +10,17 @@
         <textarea class="form-control" rows="20" id="mytextarea" name="Content" required>{{.article.Content}}</textarea>
     </div>
     <div class="form-group">
-        {{if .tagshas}}
-        {{range $taghas := .tagshas}}
-        <label for="{{$taghas.Name}}" class="checkbox-inline">
-            <input type="checkbox" id="{{$taghas.Name}}" value="{{$taghas.Name}}" name="tag" checked>{{$taghas.Name}}
+        {{if .tagshave}}
+        {{range $taghave := .tagshave}}
+        <label for="{{$taghave.Name}}" class="checkbox-inline">
+            <input type="checkbox" id="{{$taghave.Name}}" value="{{$taghave.Name}}" name="tag" checked>{{$taghave.Name}}
         </label>
         {{end}}
         {{end}}
 
-        {{range $tagnohas := .tagsnohas}}
-        <label for="{{$tagnohas.Name}}" class="checkbox-inline">
-            <input type="checkbox" id="{{$tagnohas.Name}}" value="{{$tagnohas.Name}}" name="tag">{{$tagnohas.Name}}
+        {{range $tagnohave := .tagsnohave}}
+        <label for="{{$tagnohave.Name}}" class="checkbox-inline">
+            <input type="checkbox" id="{{$tagnohave.Name}}" value="{{$tagnohave.Name}}" name="tag">{{$tagnohave.Name}}
         </label>
         {{end}}
     </div>

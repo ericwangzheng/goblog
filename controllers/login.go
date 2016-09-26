@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"goblog/models"
+	"github.com/nsecgo/goblog/models"
 	"html/template"
 	"crypto/sha256"
 	"fmt"
@@ -30,7 +30,7 @@ func (c *LoginController) Post() {
 	p := []byte(c.GetString("upass"))
 	pass := fmt.Sprintf("%x", sha256.Sum256(p))
 	if upass == pass {
-		c.SetSecureCookie("panzer", "uname", uname)
+		c.SetSecureCookie(CookieSecret, "uname", uname)
 		c.Redirect("/", 302)
 	} else {
 		c.Redirect("/login?errmsg=passiswrong", 302)
