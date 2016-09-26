@@ -1,4 +1,6 @@
-# goblog
+#goblog
 A simple blog based on beego
 
-Require `github.com/mattn/go-sqlite3`
+#Install or Update
+run command line:
+`go get -u -v github.com/nsecgo/goblog`
