@@ -3,9 +3,6 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/nsecgo/goblog/models"
-	"github.com/astaxie/beego/orm"
-	"html/template"
-	"time"
 	"strings"
 )
 
@@ -22,59 +19,57 @@ func (c *Default) Prepare() {
 	}
 }
 func (c *Default) Index() {
+	page, err := c.GetInt("page")
+	if err != nil {
+		page = 1
+	}
 	c.Data["title"] = "nsec's Blog"
 	c.TplName = "index.html"
-	articles := models.Index()
-	c.Data["blogs"] = articles
-
-	tagcount_map := make(map[string]int64)
-	all := models.ReadALLtag()
-	for _, tag := range all {
-		tagcount_map[tag.Name], _ = models.GetArticleIdBytag(tag.Name)
+	article, total := models.GetArticles(10, page)
+	c.Data["articles"] = article
+	c.Data["pageNo"] = page
+	if a := total % 10; a == 0 {
+		c.Data["pageTotal"] = total / 10
+	} else {
+		c.Data["pageTotal"] = total / 10 + 1
 	}
-	c.Data["tagcount"] = tagcount_map
+	c.Data["tagsandcount"] = models.GetTagsAndCount()
 }
 
-func (c *Default) Show() {
+func (c *Default) ShowArticleById() {
 	id, err := c.GetInt(":id")
 	if err != nil {
 		c.Redirect("/", 302)
 	}
-	article, err := models.Show(id)
-	if err == orm.ErrNoRows {
+	article, err := models.GetArticleById(id)
+	if err != nil {
 		c.Redirect("/", 302)
 	}
-	rpc, _ := time.LoadLocation("PRC")
-	article.Create_time = article.Create_time.In(rpc)
 	c.TplName = "article.html"
-	c.Data["article"] = article
 	c.Data["title"] = article.Title
-	c.Data["content"] = template.HTML(article.Content)
+	c.Data["article"] = article
 	c.Data["id"] = id
-	c.Data["tag"] = models.ReadtagByid(id)
 }
-func (c *Default) ReadArticleByID() {
-	tag := c.Ctx.Input.Param(":tag")
-	_, ids := models.GetArticleIdBytag(tag)
-	var idsint []int
-	for _, id := range ids {
-		idsint = append(idsint, id.Article_id)
+
+func (c *Default) ShowArticlesByTag() {
+	tag := c.GetString(":tag")
+	articles, err := models.GetArticlesByTag(tag)
+	if err != nil {
+		c.Redirect("/", 302)
 	}
-	articles := models.ShowArticlesByids(idsint)
 	c.TplName = "index.html"
-	c.Data["blogs"] = articles
+	c.Data["articles"] = articles
 	c.Data["tag"] = tag
 	c.Data["title"] = "打有 \"" + tag + "\" 标签的文章"
 }
 func (c *Default)Search() {
-	key := c.GetString("key")
-	key = strings.TrimSpace(key)
-	if key == "" {
+	key := strings.TrimSpace(c.GetString("key"))
+	if len(key) == 0 {
 		c.Redirect("/", 302)
 	}
 	articles := models.Search(key)
 	c.TplName = "index.html"
-	c.Data["blogs"] = articles
+	c.Data["articles"] = articles
 	c.Data["search"] = key
 	c.Data["title"] = "搜索 \"" + key + "\" 的结果"
 }

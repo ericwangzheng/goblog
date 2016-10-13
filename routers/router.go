@@ -8,8 +8,8 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.Default{}, "get:Index")
-	beego.Router("/articleid/:id([0-9]+)", &controllers.Default{}, "get:Show")
-	beego.Router("/tag/:tag", &controllers.Default{}, "get:ReadArticleByID")
+	beego.Router("/articleid/:id([0-9]+)", &controllers.Default{}, "get:ShowArticleById")
+	beego.Router("/tag/:tag", &controllers.Default{}, "get:ShowArticlesByTag")
 	beego.Router("/search", &controllers.Default{}, "get:Search")
 	beego.Router("/login", &controllers.LoginController{})
 	beego.Router("/logout", &controllers.LoginController{}, "get:Logout")
@@ -33,7 +33,7 @@ func init() {
 			beego.NSBefore(auth),
 			beego.NSRouter("/create", &controllers.EditController{}, "get:Add;post:DoAdd"),
 			beego.NSRouter("/edit/:id([0-9]+)", &controllers.EditController{}, "get:Update;post:DoUpdate"),
-			beego.NSRouter("/edit/upload", &controllers.EditController{}, "post:Upload"),
+			beego.NSRouter("/edit/upload", &controllers.UploadController{}, "post:Upload"),
 			beego.NSRouter("/changepass", &controllers.UserSetting{}),
 		)
 	//注册namespace

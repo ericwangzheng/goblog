@@ -6,6 +6,7 @@ import (
 	"github.com/nsecgo/goblog/models"
 	"fmt"
 	"crypto/sha256"
+	"strings"
 )
 
 type UserSetting struct {
@@ -20,15 +21,24 @@ func (c *UserSetting)Get() {
 }
 func (c *UserSetting)Post() {
 	uname, _ := c.GetSecureCookie(CookieSecret, "uname")
-	upass := models.ReadUser(uname)
-	if upass != "" {
-		p := []byte(c.GetString("oldpass"))
-		pass := fmt.Sprintf("%x", sha256.Sum256(p))
-		if pass == upass {
-			p = []byte(c.GetString("newpass"))
-			pass = fmt.Sprintf("%x", sha256.Sum256(p))
-			models.ChangePass(uname, pass)
+	oldpass := []byte(strings.TrimSpace(c.GetString("oldpass")))
+	newpass := []byte(strings.TrimSpace(c.GetString("newpass")))
+	if len(oldpass) == 0 || len(newpass) == 0 {
+		c.Redirect("/?event=length-of-pass-error", 302)
+	} else {
+		upass := models.GetUpassByUname(uname)
+		if len(upass) != 0 {
+			oldsha256pass := fmt.Sprintf("%x", sha256.Sum256(oldpass))
+			println(oldpass)
+			println(oldsha256pass)
+			println(upass)
+			if oldsha256pass == upass {
+				upass = fmt.Sprintf("%x", sha256.Sum256(newpass))
+				models.ChangePass(uname, upass)
+			}
+			c.Redirect("/?event=change-pass-success", 302)
+		} else {
+			c.Redirect("/?event=system-error", 302)
 		}
 	}
-	c.Redirect("/?event=change-pass-success",302)
 }

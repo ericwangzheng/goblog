@@ -6,44 +6,33 @@ import (
 
 //定义结构体，名字为表名大写，字段大写，为表的字段
 type Tag struct {
-	Id         int       `orm:"pk;auto"` //主键，自动增长
-	Name       string
-	Article_id int
+	Id       int        `orm:"pk;auto"` //主键，自动增长
+	Name     string     `orm:"unique"`
+	Articles []*Article `orm:"reverse(many)"`
 }
 
-func ReadALLtag() []*Tag {
+func GetAllTags() []Tag {
 	o := orm.NewOrm()
-	var a []*Tag
-	o.QueryTable("tag").Distinct().All(&a, "Name")
-	return a
+	var tags []Tag
+	o.QueryTable("Tag").All(&tags, "Name")
+	return tags
 }
-func ReadtagByid(id int) []*Tag {
-	o := orm.NewOrm()
-	var a []*Tag
-	o.QueryTable("tag").Filter("Article_id", id).Distinct().All(&a, "Name")
-	return a
-}
-func ReadNohas(taghas []*Tag) []*Tag {
-	o := orm.NewOrm()
-	var a []*Tag
-	qs := o.QueryTable("tag")
-	for _, name := range taghas {
-		qs = qs.Exclude("Name", name.Name)
+func GetNonTagsByHave(tags []*Tag) *[]Tag {
+	var have []string
+	for _, tag := range tags {
+		have = append(have, tag.Name)
 	}
-	qs.Distinct().All(&a, "Name")
-	return a
+	var nontags []Tag
+	orm.NewOrm().QueryTable("Tag").Exclude("Name__in", have).All(&nontags)
+	return &nontags
 }
-func Addtag(tags []Tag) {
+func GetTagsAndCount() map[string]int64 {
+	tagsandcount_map := make(map[string]int64)
 	o := orm.NewOrm()
-	o.InsertMulti(10, tags)
-}
-func Deletetag(id int) {
-	o := orm.NewOrm()
-	o.QueryTable("tag").Filter("article_id", id).Delete()
-}
-func GetArticleIdBytag(name string) (int64, []*Tag) {
-	o := orm.NewOrm()
-	var tag  []*Tag
-	a, _ := o.QueryTable("tag").Filter("Name", name).Distinct().All(&tag, "Article_id")
-	return a, tag
+	var tags []Tag
+	o.QueryTable("Tag").All(&tags)
+	for _, tag := range tags {
+		tagsandcount_map[tag.Name], _ = o.QueryM2M(&tag, "Articles").Count()
+	}
+	return tagsandcount_map
 }

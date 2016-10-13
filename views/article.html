@@ -1,8 +1,8 @@
 {{template "header.html" .}}
 {{if .article}}
 <h3>{{.article.Title}}</h3>
-<p>作者: {{.article.Author}} ● {{dateformat .article.Create_time "2006-01-02 15:04:05"}} ●
-    {{range $tag:= .tag}}
+<p>作者: {{.article.User.Uname}} ● {{dateformat .article.Create_time "2006-01-02 15:04"}} ●
+    {{range $tag:= .article.Tags}}
     <a href="/tag/{{$tag.Name}}"><button type="button" class="btn btn-success btn-xs">{{$tag.Name}}</button></a>
     {{end}}
     {{if ne .uname ""}}
@@ -11,7 +11,7 @@
     {{end}}
 </p>
 <hr>
-{{.content}}
+{{str2html .article.Content}}
 <!-- 多说评论框 start -->
 <div class="ds-thread" data-thread-key="{{.id}}" data-title="{{.article.Title}}" data-url="http://blog.nsec.tk/{{.id}}"></div>
 <!-- 多说评论框 end -->

@@ -3,3 +3,4 @@ goblog
 .idea
 .fuse*
 /static/upload
+goblog.exe

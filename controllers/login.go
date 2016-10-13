@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/nsecgo/goblog/models"
 	"html/template"
 	"crypto/sha256"
 	"fmt"
+	"strings"
+	"github.com/nsecgo/goblog/models"
 )
 
 type LoginController struct {
@@ -19,17 +20,14 @@ func (c *LoginController) Get() {
 	c.Data["uname"] = ""
 }
 func (c *LoginController) Post() {
-	uname := c.GetString("uname")
-	if uname == "" {
-		c.Redirect("/login?errmsg=nameisnull", 302)
+	uname := strings.TrimSpace(c.GetString("uname"))
+	upass := strings.TrimSpace(c.GetString("upass"))
+	if len(uname) == 0 || len(upass) == 0 {
+		c.Redirect("/login?errmsg=nameorpassisnull", 302)
 	}
-	upass := models.ReadUser(uname)
-	if upass == "" {
-		c.Redirect("/login?errmsg=passisnull", 302)
-	}
-	p := []byte(c.GetString("upass"))
-	pass := fmt.Sprintf("%x", sha256.Sum256(p))
-	if upass == pass {
+	sha256upass := fmt.Sprintf("%x", sha256.Sum256([]byte(upass)))
+	upass = models.GetUpassByUname(uname)
+	if upass == sha256upass {
 		c.SetSecureCookie(CookieSecret, "uname", uname)
 		c.Redirect("/", 302)
 	} else {

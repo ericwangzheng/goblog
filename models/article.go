@@ -3,55 +3,111 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 	"time"
+	"errors"
 )
-//定义结构体，名字为表名大写，字段大写，为表的字段
+
 type Article struct {
 	Id          int       `orm:"pk;auto"` //主键，自动增长
 	Title       string
 	Content     string    `orm:"type(text)"`
-	Author      string
+	User        *User     `orm:"rel(fk);on_delete(do_nothing)"`
 	Create_time time.Time `orm:"auto_now_add;type(datatime)"`
 	Update_time time.Time `orm:"auto_now;type(datatime)"`
+	Tags        []*Tag    `orm:"rel(m2m)"`
 }
 
-func Insert(a *Article) {
+func GetArticles(num, page int) ([]Article, int64) {
+	offset := num * (page - 1)
 	o := orm.NewOrm()
-	o.Insert(a)
+	count, _ := o.QueryTable("Article").Count()
+	var articles []Article
+	o.QueryTable("Article").Limit(num, offset).OrderBy("-Id").All(&articles)
+	for key, article := range articles {
+		prc, _ := time.LoadLocation("PRC")
+		articles[key].Create_time = article.Create_time.In(prc)
+		articles[key].Update_time = article.Update_time.In(prc)
+	}
+	return articles, count
 }
 
-func Index() *[]*Article {
+func GetArticleById(id int) (*Article, error) {
+	article := &Article{Id:id}
 	o := orm.NewOrm()
-	var articles []*Article
-	o.QueryTable("article").OrderBy("-Id").All(&articles)
-	return &articles
-}
-
-func Show(id int) (Article, error) {
-	o := orm.NewOrm()
-	article := Article{Id:id}
-	err := o.Read(&article)
+	err := o.Read(article)
+	if err == nil {
+		prc, _ := time.LoadLocation("PRC")
+		article.Create_time = article.Create_time.In(prc)
+		article.Update_time = article.Update_time.In(prc)
+		o.LoadRelated(article, "Tags")
+		o.Read(article.User)
+	}
 	return article, err
 }
-
-func Update(article *Article) error {
+func GetArticlesByTag(tag string) ([]Article, error) {
+	var articles []Article
 	o := orm.NewOrm()
-	i := Article{Id:article.Id}
-	err := o.Read(&i)
+	_, err := o.QueryTable("Article").Filter("Tags__Tag__Name", tag).All(&articles)
 	if err == nil {
-		_, err := o.Update(article, "Title", "Content")
+		for key, article := range articles {
+			prc, _ := time.LoadLocation("PRC")
+			articles[key].Create_time = article.Create_time.In(prc)
+			articles[key].Update_time = article.Update_time.In(prc)
+		}
+	}
+	return articles, err
+}
+func Add(article *Article, tags *[]Tag) {
+	o := orm.NewOrm()
+	o.Read(article.User, "Uname")
+	o.Insert(article)
+	m2m := o.QueryM2M(article, "Tags")
+	i, _ := o.QueryTable("Tag").PrepareInsert()
+	for _, tag := range *tags {
+		err := o.Read(&tag, "Name")
+		if err != nil {
+			i.Insert(&tag)
+		}
+		m2m.Add(tag)
+	}
+	i.Close() // 别忘记关闭 statement
+}
+
+func Update(article *Article, tags *[]Tag) error {
+	o := orm.NewOrm()
+	ok := o.QueryTable("Article").Filter("id", article.Id).Exist()
+	if ok {
+		_, err := o.Update(article, "Title", "Content", "Update_time")
+		if err == nil {
+			m2m := o.QueryM2M(article, "Tags")
+			m2m.Clear()
+			i, _ := o.QueryTable("Tag").PrepareInsert()
+			for _, tag := range *tags {
+				err := o.Read(&tag, "Name")
+				if err != nil {
+					i.Insert(&tag)
+				}
+				m2m.Add(tag)
+			}
+			i.Close() // 别忘记关闭 statement
+		}
+		return err
+	} else {
+		err := errors.New("non row")
 		return err
 	}
-	return err
 }
-func ShowArticlesByids(ids []int) *[]*Article {
-	var articles []*Article
+
+func Search(key string) *[]Article {
+	var articles []Article
 	o := orm.NewOrm()
-	o.QueryTable("Article").Filter("Id__in", ids).OrderBy("-Id").All(&articles, "Id", "Title", "Content")
-	return &articles
-}
-func Search(key string) *[]*Article {
-	var articles []*Article
-	o := orm.NewOrm()
-	o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&articles, "Id", "Title", "Content")
+	_, err := o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&articles)
+	if err == nil {
+		for key, article := range articles {
+			o.Read(article.User)
+			prc, _ := time.LoadLocation("PRC")
+			articles[key].Create_time = article.Create_time.In(prc)
+			articles[key].Update_time = article.Update_time.In(prc)
+		}
+	}
 	return &articles
 }
