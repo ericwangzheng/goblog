@@ -11,5 +11,5 @@ func init() {
 	orm.RegisterModel(new(Article), new(User), new(Tag))        //不带前缀的表
 	orm.RegisterDataBase("default", "sqlite3", beego.AppConfig.String("sqlitepath"))
 	orm.RunSyncdb("default", false, true)
-	orm.Debug = true
+	orm.Debug = false
 }
