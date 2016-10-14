@@ -29,9 +29,6 @@ func (c *UserSetting)Post() {
 		upass := models.GetUpassByUname(uname)
 		if len(upass) != 0 {
 			oldsha256pass := fmt.Sprintf("%x", sha256.Sum256(oldpass))
-			println(oldpass)
-			println(oldsha256pass)
-			println(upass)
 			if oldsha256pass == upass {
 				upass = fmt.Sprintf("%x", sha256.Sum256(newpass))
 				models.ChangePass(uname, upass)
