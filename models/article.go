@@ -31,15 +31,14 @@ func GetArticles(num, page int) ([]Article, int64) {
 }
 
 func GetArticleById(id int) (*Article, error) {
-	article := &Article{Id:id}
+	article := &Article{}
 	o := orm.NewOrm()
-	err := o.Read(article)
+	err := o.QueryTable("Article").Filter("Id", id).RelatedSel().One(article)
 	if err == nil {
 		prc, _ := time.LoadLocation("PRC")
 		article.Create_time = article.Create_time.In(prc)
 		article.Update_time = article.Update_time.In(prc)
 		o.LoadRelated(article, "Tags")
-		o.Read(article.User)
 	}
 	return article, err
 }
