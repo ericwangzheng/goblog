@@ -1,6 +1,6 @@
 FROM ubuntu
 WORKDIR /root
-RUN apt update && apt dist-upgrade -y && apt install wget
+RUN apt update && apt install wget -y
 RUN wget https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz -o go.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go.linux-amd64.tar.gz
 RUN echo 'export GOPATH=/root/gopath' >> /etc/profile
