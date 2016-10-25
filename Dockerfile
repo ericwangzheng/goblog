@@ -7,8 +7,8 @@ RUN echo 'export GOPATH=/root/gopath' >> /etc/profile
 RUN echo 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin' >> /etc/profile
 RUN ["/bin/bash","-c","source /etc/profile"]
 RUN mkdir gopath
-RUN go get -u github.com/nsecgo/goblog
+RUN ["/bin/bash","-c","go get -u github.com/nsecgo/goblog"]
 RUN cd $GOPATH/src/github.com/nsecgo/goblog && cp goblog.sqlite.example goblog.sqlite \
     && cp conf/app.conf.example conf/app.conf
 EXPOSE 80
-ENTRYPOINT ["goblog"]
+ENTRYPOINT ["/bin/bash","-c","goblog"]
