@@ -1,4 +1,4 @@
-FROM nsecgo/golang
+FROM nsecgo/ubuntu-go
 WORKDIR $GOPATH
 RUN go get -u github.com/nsecgo/goblog
 RUN cd $GOPATH/src/github.com/nsecgo/goblog && cp goblog.sqlite.example goblog.sqlite \
