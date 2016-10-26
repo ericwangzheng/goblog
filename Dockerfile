@@ -18,10 +18,10 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-WORKDIR $GOPATH
 RUN go get -u github.com/nsecgo/goblog
 RUN cd $GOPATH/src/github.com/nsecgo/goblog && cp goblog.sqlite.example goblog.sqlite \
         && cp conf/app.conf.example conf/app.conf \
         && cp $GOPATH/bin/goblog $GOPATH/src/github.com/nsecgo/goblog/goblog
 EXPOSE 80
-ENTRYPOINT ["src/github.com/nsecgo/goblog/goblog"]
+WORKDIR $GOPATH/src/github.com/nsecgo/goblog
+ENTRYPOINT ["goblog"]
