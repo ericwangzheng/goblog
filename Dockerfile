@@ -21,6 +21,7 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
 RUN go get -u github.com/nsecgo/goblog
 RUN cd $GOPATH/src/github.com/nsecgo/goblog && cp goblog.sqlite.example goblog.sqlite \
-        && cp conf/app.conf.example conf/app.conf
+        && cp conf/app.conf.example conf/app.conf \
+        && cp $GOPATH/bin/goblog $GOPATH/src/github.com/nsecgo/goblog/goblog
 EXPOSE 80
-ENTRYPOINT ["goblog"]
+ENTRYPOINT ["src/github.com/nsecgo/goblog/goblog"]
