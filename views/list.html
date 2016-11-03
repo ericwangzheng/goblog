@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>班级列表</title>
+</head>
+<body>
+{{if .bjh}}
+    {{range $key, $value := .lists}}
+        <ul>
+            <li><img src="static/2016/{{$.bjh}}/{{$value}}"></li>
+            <li>{{$value}}</li>
+        </ul>
+    {{end}}
+{{else}}
+    {{range $key, $bjh := .lists}}
+        <p><a href="?bjh={{$bjh}}" target="_blank">{{$bjh}}</a></p>
+    {{end}}
+{{end}}
+</body>
+</html>

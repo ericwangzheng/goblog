@@ -7,6 +7,7 @@ import (
 )
 
 func init() {
+	beego.Router("/fuckytustu/?:bjh", &controllers.FuckYTUController{},"get:List")
 	beego.Router("/", &controllers.Default{}, "get:Index")
 	beego.Router("/articleid/:id([0-9]+)", &controllers.Default{}, "get:ShowArticleById")
 	beego.Router("/tag/:tag", &controllers.Default{}, "get:ShowArticlesByTag")
