@@ -6,16 +6,16 @@
     <title>班级列表</title>
 </head>
 <body>
-{{if .bjh}}
+{{if .show}}
     {{range $key, $value := .lists}}
         <ul>
-            <li><img src="static/2016/{{$.bjh}}/{{$value}}"></li>
+            <li><img src="/{{$.path}}/{{$value}}"></li>
             <li>{{$value}}</li>
         </ul>
     {{end}}
 {{else}}
-    {{range $key, $bjh := .lists}}
-        <p><a href="?bjh={{$bjh}}" target="_blank">{{$bjh}}</a></p>
+    {{range $key, $value := .lists}}
+        <p><a href="./{{$value}}" target="_blank">{{$value}}</a></p>
     {{end}}
 {{end}}
 </body>

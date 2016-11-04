@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"io/ioutil"
 	"strings"
+	"os"
 )
 
 type FuckYTUController struct {
@@ -11,26 +12,28 @@ type FuckYTUController struct {
 }
 
 func (c *FuckYTUController) List() {
+	splat := c.GetString(":splat")
+	splat = strings.Replace(splat, ".", "", -1)
+	path := "static/fuckytustu/" + splat
 	var lists []string
-	bjh := c.GetString("bjh")
-	bjh = strings.Replace(bjh, ".", "", -1)
-	bjh = strings.Replace(bjh, "/", "", -1)
-	if len(bjh) == 0 {
-		files, _ := ioutil.ReadDir("static/2016")
+	files, ok := ioutil.ReadDir(path)
+	if ok == nil {
 		for _, file := range files {
-			if file.IsDir() {
-				lists = append(lists, file.Name())
+			lists = append(lists, file.Name())
+		}
+		c.Data["show"] = false
+		file, a := os.Open(path + "/" + lists[1])
+		if a == nil {
+			stat, b := file.Stat()
+			if b == nil {
+				if stat.IsDir() == false {
+					c.Data["show"] = true
+				}
 			}
 		}
-	} else {
-		files, _ := ioutil.ReadDir("static/2016/" + bjh)
-		for _, file := range files {
-			if !file.IsDir() {
-				lists = append(lists, file.Name())
-			}
-		}
+
 	}
 	c.TplName = "list.html"
-	c.Data["bjh"] = bjh
 	c.Data["lists"] = lists
+	c.Data["path"] = path
 }
