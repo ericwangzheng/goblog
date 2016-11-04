@@ -36,4 +36,5 @@ func (c *FuckYTUController) List() {
 	c.TplName = "list.html"
 	c.Data["lists"] = lists
 	c.Data["path"] = path
+	c.Data["splat"] = splat
 }

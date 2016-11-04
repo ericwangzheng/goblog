@@ -15,7 +15,7 @@
     {{end}}
 {{else}}
     {{range $key, $value := .lists}}
-        <p><a href="./{{$value}}" target="_blank">{{$value}}</a></p>
+        <p><a href="/fuckytustu/{{$.splat}}/{{$value}}" target="_blank">{{$value}}</a></p>
     {{end}}
 {{end}}
 </body>
