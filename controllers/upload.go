@@ -10,8 +10,7 @@ type UploadController struct {
 	beego.Controller
 }
 func (c *UploadController)Upload() {
-	f, h, err := c.GetFile("uploadimg")
-	defer f.Close()
+	_, h, err := c.GetFile("uploadimg")
 	if err != nil {
 		a := fmt.Sprintf("%s", err)
 		c.Ctx.WriteString("error|" + a)

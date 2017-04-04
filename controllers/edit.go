@@ -97,3 +97,11 @@ func (c *EditController) DoUpdate() {
 	models.Update(&article, &tags)
 	c.Redirect(beego.URLFor("Default.ShowArticleById", ":id", id), 302)
 }
+func (c *EditController)Delete(){
+	id, err := c.GetInt(":id")
+	if err != nil {
+		c.Redirect("/", 302)
+	}
+	models.DelArticleById(id)
+	c.Redirect(beego.URLFor("Default.Index", ":id", id), 302)
+}

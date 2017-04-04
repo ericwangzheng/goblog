@@ -95,7 +95,11 @@ func Update(article *Article, tags *[]Tag) error {
 		return err
 	}
 }
-
+func DelArticleById(id int) {
+	o := orm.NewOrm()
+	o.Delete(&Article{Id: id})
+	o.QueryTable("article_tags").Filter("article_id",id).Delete()
+}
 func Search(key string) *[]Article {
 	var articles []Article
 	o := orm.NewOrm()

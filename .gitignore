@@ -2,5 +2,4 @@ goblog*
 !goblog.sqlite.example
 .idea
 .fuse*
-/static/upload
-static/fuckytustu
+/static/upload/img/*
