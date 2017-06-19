@@ -2,14 +2,14 @@ FROM ubuntu
 
 MAINTAINER nsecgo <nsecgo@gmail.com>
 
-ENV GOLANG_VERSION 1.7.3
+ENV GOLANG_VERSION 1.8.3
 ENV GOLANG_SRC_URL https://storage.googleapis.com/golang/go$GOLANG_VERSION.linux-amd64.tar.gz
 
 RUN apt update && apt install -y \
         gcc \
         wget \
         git \
-        libc-dev \
+        libc6-dev \
         && wget -q "$GOLANG_SRC_URL" -O golang.tar.gz \
         && tar -C /usr/local -xzf golang.tar.gz \
         && rm golang.tar.gz
