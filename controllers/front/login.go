@@ -32,7 +32,7 @@ func (c *FrontController) Login() {
 	}
 }
 
-// @router /login [get]
+// @router /logout [get]
 func (c *FrontController) Logout() {
 	c.Ctx.SetCookie("uname", "", -1)
 	c.Redirect("/login", 302)

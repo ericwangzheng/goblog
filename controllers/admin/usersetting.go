@@ -10,7 +10,7 @@ import (
 // @router /changepass [get]
 func (c *AdminController) Get() {
 	c.Layout = "master.html"
-	c.TplName = "BlogController.html"
+	c.TplName = "usersetting.html"
 	c.Data["uname"], _ = c.GetSecureCookie(CookieSecret, "uname")
 	c.Data["title"] = "修改密码"
 }
