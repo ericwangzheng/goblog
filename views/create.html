@@ -1,13 +1,15 @@
-{{template "header.html" .}}
 <form id="Article" action="" method="post">
-    {{.xsrf}}
     <div class="form-group">
-        <label for="exampleInputuname">Title</label>
-        <input type="text" class="form-control" id="exampleInputuname" name="Title" value="{{.article.Title}}" required>
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="Title" value="{{.article.Title}}" required>
     </div>
     <div class="form-group">
-        <label for="mytextarea">Content</label>
-        <textarea class="form-control" rows="20" id="mytextarea" name="Content" required>{{.article.Content}}</textarea>
+        <label for="editor">Content</label>
+        <div id="editor">
+            {{if .article.Content}}
+            {{str2html .article.Content}}
+            {{end}}
+        </div>
     </div>
     <div class="form-group">
         {{if .article.Tags}}
@@ -17,7 +19,6 @@
         </label>
         {{end}}
         {{end}}
-
         {{range $tagnothave := .tagsnothave}}
         <label for="{{$tagnothave.Name}}" class="checkbox-inline">
             <input type="checkbox" id="{{$tagnothave.Name}}" value="{{$tagnothave.Name}}" name="tags">{{$tagnothave.Name}}
@@ -28,18 +29,16 @@
         <label for="tags">或添加新标签 , 多个之间用竖线(|)隔开</label>
         <input type="text" class="form-control" id="tags" name="newtags">
     </div>
-    <button type="submit" class="btn btn-default">提交</button>
+    <a id="submit" class="btn btn-default">提交</a>
 </form>
 <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
-<script src="/static/js/js.cookie-2.1.2.min.js"></script>
 <script type="text/javascript">
-    xsrf = Cookies.get('uname')
-    var editor = new wangEditor('mytextarea');
-    editor.config.uploadImgUrl = '/admin/edit/upload';
-    editor.config.uploadImgFileName = 'uploadimg'
-    editor.config.uploadParams = {
-        _xsrf: '{{.xsrf_token}}'
-    };
+    var E = wangEditor;
+    var editor = new E('#editor');
+    editor.customConfig.uploadImgShowBase64 = true;   // 使用 base64 保存图片
     editor.create();
+    $("#submit").click(function () {
+        var input = $("<input>").attr("type", "hidden").attr("name", "Content").val(editor.txt.html());
+        $('#Article').append($(input)).submit();
+    });
 </script>
-{{template "footer.html" .}}

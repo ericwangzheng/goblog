@@ -23,9 +23,9 @@ func GetNonTagsByHave(tags []*Tag) *[]Tag {
 		have = append(have, tag.Name)
 	}
 	var nontags []Tag
-	if len(have)==0 {
+	if len(have) == 0 {
 		orm.NewOrm().QueryTable("Tag").All(&nontags)
-	}else {
+	} else {
 		orm.NewOrm().QueryTable("Tag").Exclude("Name__in", have).All(&nontags)
 	}
 	return &nontags

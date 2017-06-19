@@ -1,34 +1,32 @@
-{{template "header.html" .}}
-
 <div class="row">
     <div class="col-xs-12 col-sm-8">
         {{if .tag}}
-            <h4>打有 " {{.tag}} " 标签的文章 :</h4><br>
+        <h4>贴有 " {{.tag}} " 标签的文章 :</h4><br>
         {{end}}
         {{if .search}}
-            <h4>搜索 " {{.search}} " 的结果 :</h4><br>
+        <h4>搜索 " {{.search}} " 的结果 :</h4><br>
         {{end}}
         {{if .articles}}
-            <ul class="list-group">
-                {{range $article := .articles}}
-                <div class="media">
-                    <div class="media-body">
-                        <h3 class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a></h3>
-                        <p style="text-align: right;">{{date $article.Update_time "Y-m-d H:i"}}</p>
-                        {{substr $article.Content 0 120 | html2str}}
-                    </div>
+        <ul class="list-group">
+            {{range $article := .articles}}
+            <div class="media">
+                <div class="media-body">
+                    <h3 style="display: inline-block" class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a></h3>
+                    <p style="display: inline-block;float: right;">{{date $article.Update_time "Y-m-d H:i"}}</p>
+                    <br>{{substr $article.Content 0 120 | html2str}}
                 </div>
-                {{end}}
-            </ul>
+            </div>
+            {{end}}
+        </ul>
         <ul id="page"></ul>
-        <script type="text/javascript" src="/static/js/bootstrap-paginator.js"></script>
+        <script type="text/javascript" src="/static/js/bootstrap-paginator.min.js"></script>
         <script type="text/javascript">
             $(function () {
                 $("#page").bootstrapPaginator({
                     currentPage: '{{.pageNo}}',
                     totalPages: '{{.pageTotal}}',
                     bootstrapMajorVersion: 3,
-                    onPageClicked: function(e,originalEvent,type,page){
+                    onPageClicked: function (e, originalEvent, type, page) {
                         window.location.href = "./?page=" + page
                     }
                 });
@@ -38,34 +36,13 @@
     </div>
     <div class="col-xs-12 col-sm-4">
         {{if .tagsandcount}}
-        标签：<hr>
+        标签：
+        <hr>
         {{range $key,$count := .tagsandcount}}
-        <a href="/tag/{{$key}}">
-            <button class="btn btn-success" type="button">
-                {{$key}} <span class="badge">{{$count}}</span>
-            </button>
+        <a href="/tag/{{$key}}" type="button" class="btn btn-success">
+            {{$key}} <span class="badge">{{$count}}</span>
         </a>
         {{end}}
         {{end}}
-        <br><br>最新评论：
-        <!-- 多说最新评论 start -->
-        <div class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
-        <!-- 多说最新评论 end -->
-        <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-        <script type="text/javascript">
-            var duoshuoQuery = {short_name:"nsec"};
-            (function() {
-                var ds = document.createElement('script');
-                ds.type = 'text/javascript';ds.async = true;
-                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-                ds.charset = 'UTF-8';
-                (document.getElementsByTagName('head')[0]
-                || document.getElementsByTagName('body')[0]).appendChild(ds);
-            })();
-        </script>
-        <!-- 多说公共JS代码 end -->
-
     </div>
 </div>
-
-{{template "footer.html" .}}

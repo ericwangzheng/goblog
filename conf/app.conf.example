@@ -1,8 +1,4 @@
 appname = goblog
 httpport = 80
 runmode = prod
-enablexsrf = true
-xsrfkey = A2oDTGGXQAGaYdkL5gAmGeAAHuDA7EQnp2XdTDef
-xsrfexpire = 3600
-cookiesecret = panzer
-sqlitepath = goblog.sqlite
+sqlitepath = db.sqlite

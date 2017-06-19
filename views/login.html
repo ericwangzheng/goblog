@@ -1,6 +1,4 @@
-{{template "header.html" .}}
 <form id="User" action="" method="post">
-    {{.xsrf}}
     <div class="form-group">
         <label for="exampleInputuname">用户名</label>
         <input type="text" class="form-control" id="exampleInputuname" name="uname" required>
@@ -11,4 +9,3 @@
     </div>
     <button type="submit" class="btn btn-default">登录</button>
 </form>
-{{template "footer.html" .}}

@@ -14,12 +14,10 @@ type User struct {
 
 func GetUpassByUname(uname string) string {
 	o := orm.NewOrm()
-	user := User{Uname:uname}
+	user := User{Uname: uname}
 	o.Read(&user, "Uname")
 	return user.Upass
 }
 func ChangePass(uname, upass string) {
-	orm.NewOrm().QueryTable("User").Filter("Uname", uname).Update(orm.Params{
-		"Upass":upass,
-	})
+	orm.NewOrm().QueryTable("User").Filter("Uname", uname).Update(orm.Params{"Upass": upass})
 }

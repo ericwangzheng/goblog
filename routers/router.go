@@ -1,42 +1,43 @@
 package routers
 
 import (
-	"github.com/nsecgo/goblog/controllers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
+	"crypto/rand"
+	"github.com/nsecgo/goblog/controllers/front"
+	"github.com/nsecgo/goblog/controllers/admin"
 )
 
 func init() {
-	beego.Router("/fuckytustu/*", &controllers.FuckYTUController{},"get:List")
-	beego.Router("/", &controllers.Default{}, "get:Index")
-	beego.Router("/articleid/:id([0-9]+)", &controllers.Default{}, "get:ShowArticleById")
-	beego.Router("/tag/:tag", &controllers.Default{}, "get:ShowArticlesByTag")
-	beego.Router("/search", &controllers.Default{}, "get:Search")
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/logout", &controllers.LoginController{}, "get:Logout")
+	b := make([]byte, 10)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic(err)
+	}
+	front.CookieSecret = string(b)
+	admin.CookieSecret = front.CookieSecret
+}
 
-	var cantlogin = func(ctx *context.Context) {
-		_, ok := ctx.GetSecureCookie(controllers.CookieSecret, "uname")
+func init() {
+	var islogin = func(ctx *context.Context) {
+		_, ok := ctx.GetSecureCookie(front.CookieSecret, "uname")
 		if ok {
 			ctx.Redirect(302, "/?event=alreadylogin")
 		}
 	}
-	beego.InsertFilter("/login", beego.BeforeExec, cantlogin)
-
 	var auth = func(ctx *context.Context) {
-		_, ok := ctx.GetSecureCookie(controllers.CookieSecret, "uname")
+		_, ok := ctx.GetSecureCookie(front.CookieSecret, "uname")
 		if !ok {
 			ctx.Redirect(302, "/login")
 		}
 	}
+	beego.InsertFilter("/login", beego.BeforeRouter, islogin)
+
+	beego.Include(&front.FrontController{})
 	ns :=
 		beego.NewNamespace("/admin",
 			beego.NSBefore(auth),
-			beego.NSRouter("/create", &controllers.EditController{}, "get:Add;post:DoAdd"),
-			beego.NSRouter("/edit/:id([0-9]+)", &controllers.EditController{}, "get:Update;post:DoUpdate"),
-			beego.NSRouter("/edit/upload", &controllers.UploadController{}, "post:Upload"),
-			beego.NSRouter("/changepass", &controllers.UserSetting{}),
-			beego.NSRouter("/delete/:id([0-9]+)", &controllers.EditController{},"get:Delete"),
+			beego.NSInclude(&admin.AdminController{}),
 		)
 	//注册namespace
 	beego.AddNamespace(ns)
