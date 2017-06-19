@@ -1,4 +1,4 @@
 appname = goblog
-httpport = 80
+httpport = 9000
 runmode = prod
-sqlitepath = db.sqlite
+sqlitepath = sqlite.db
