@@ -35,12 +35,11 @@
         {{end}}
     </div>
     <div class="col-xs-12 col-sm-4">
-        <p>About me:</p>
-        <p>Probably a sucker.</p>
-        <p>nsecgo at gmail.com</p>
-        <hr>
+        <p><b>About me:</b></p>
+        <pre>Probably a sucker.
+nsecgo at gmail.com</pre>
         {{if .tagsandcount}}
-        <p>标签:</p>
+        <p><b>标签:</b></p>
         {{range $key,$count := .tagsandcount}}
         <a href="/tag/{{$key}}" type="button" class="btn btn-success">
             {{$key}} <span class="badge">{{$count}}</span>
