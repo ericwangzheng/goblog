@@ -1,16 +1,25 @@
 {{if .article}}
 <h3>{{.article.Title}}</h3>
-<p>作者: {{.article.User.Uname}} ● {{dateformat .article.Create_time "2006-01-02 15:04"}} ●
-    {{range $tag:= .article.Tags}}
+<p>作者: {{.article.User.Uname}} ● {{dateformat .article.Create_time "2006-01-02 15:04"}} ● {{range $tag:= .article.Tags}}
     <a href="/tag/{{$tag.Name}}">
         <button type="button" class="btn btn-success btn-xs">{{$tag.Name}}</button>
     </a>
     {{end}}
     {{if ne .uname ""}}
     ●<a href="/admin/edit/{{.id}}"> 编辑 </a>
-    ●<a href="/admin/delete/{{.id}}">删除</a>
+    ●<a href="/admin/delete/{{.id}}"> 删除 </a>
     {{end}}
 </p>
 <hr>
 {{str2html .article.Content}}
+<div id="disqus_thread"></div>
+<script>
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://nsecgo.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 {{end}}

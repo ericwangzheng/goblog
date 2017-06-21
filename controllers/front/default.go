@@ -14,8 +14,8 @@ func (c *FrontController) Index() {
 	c.Data["title"] = "nsec's Blog"
 	c.Layout = "master.html"
 	c.TplName = "index.html"
-	article, total := models.GetArticles(10, page)
-	c.Data["articles"] = article
+	articles, total := models.GetArticles(10, page)
+	c.Data["articles"] = articles
 	c.Data["pageNo"] = page
 	if a := total % 10; a == 0 {
 		c.Data["pageTotal"] = total / 10
