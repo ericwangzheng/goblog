@@ -100,10 +100,12 @@ func DelArticleById(id int) {
 	o.Delete(&Article{Id: id})
 	o.QueryTable("article_tags").Filter("article_id", id).Delete()
 }
-func Search(key string) *[]Article {
+func Search(key string, num int, page int) ([]Article, int64) {
 	var articles []Article
+	offset := num * (page - 1)
 	o := orm.NewOrm()
-	_, err := o.QueryTable("article").Filter("Title__icontains", key).OrderBy("-Id").All(&articles)
+	count, _ := o.QueryTable("Article").Filter("Title__icontains", key).Count()
+	_, err := o.QueryTable("Article").Filter("Title__icontains", key).Limit(num, offset).OrderBy("-Id").All(&articles)
 	if err == nil {
 		for key, article := range articles {
 			o.Read(article.User)
@@ -112,5 +114,5 @@ func Search(key string) *[]Article {
 			articles[key].Update_time = article.Update_time.In(prc)
 		}
 	}
-	return &articles
+	return articles, count
 }

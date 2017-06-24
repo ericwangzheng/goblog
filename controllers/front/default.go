@@ -62,10 +62,20 @@ func (c *FrontController) Search() {
 	if len(key) == 0 {
 		c.Redirect("/", 302)
 	}
-	articles := models.Search(key)
+	page, err := c.GetInt("page")
+	if err != nil {
+		page = 1
+	}
+	articles, total := models.Search(key, 10, page)
 	c.Layout = "master.html"
 	c.TplName = "index.html"
 	c.Data["articles"] = articles
 	c.Data["search"] = key
 	c.Data["title"] = "搜索 \"" + key + "\" 的结果"
+	c.Data["pageNo"] = page
+	if a := total % 10; a == 0 {
+		c.Data["pageTotal"] = total / 10
+	} else {
+		c.Data["pageTotal"] = total/10 + 1
+	}
 }
