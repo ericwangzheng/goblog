@@ -11,9 +11,10 @@
             {{range $article := .articles}}
             <div class="media">
                 <div class="media-body">
-                    <h3 style="display: inline-block" class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a></h3>
+                    <h4 style="display: inline-block" class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a></h4>
                     <p style="display: inline-block;float: right;">{{date $article.Update_time "Y-m-d H:i"}}</p>
-                    <br>{{substr $article.Content 0 120 | html2str}}<a style="float: right;" href='{{urlfor "FrontController.ShowArticleById" ":id" $article.Id}}#disqus_thread'>评论</a>
+                    <div style="clear:both"></div>
+                    {{substr $article.Content 0 120 | html2str}}<a style="float: right;" href='{{urlfor "FrontController.ShowArticleById" ":id" $article.Id}}#disqus_thread'>评论</a>
                 </div>
             </div>
             {{end}}

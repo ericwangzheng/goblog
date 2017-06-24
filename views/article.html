@@ -1,5 +1,5 @@
 {{if .article}}
-<h3>{{.article.Title}}</h3>
+<h4>{{.article.Title}}</h4>
 <p>作者: {{.article.User.Uname}} ● {{dateformat .article.Create_time "2006-01-02 15:04"}} ● {{range $tag:= .article.Tags}}
     <a href="/tag/{{$tag.Name}}">
         <button type="button" class="btn btn-success btn-xs">{{$tag.Name}}</button>
