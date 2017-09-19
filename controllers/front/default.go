@@ -56,9 +56,9 @@ func (c *FrontController) ShowArticlesByTag() {
 	c.Data["title"] = "贴有 \"" + tag + "\" 标签的文章"
 }
 
-// @router /search [get]
+// @router /search/:key:string [get]
 func (c *FrontController) Search() {
-	key := strings.TrimSpace(c.GetString("key"))
+	key := strings.TrimSpace(c.GetString(":key"))
 	if len(key) == 0 {
 		c.Redirect("/", 302)
 	}

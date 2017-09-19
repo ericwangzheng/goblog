@@ -11,38 +11,31 @@
             {{range $article := .articles}}
             <div class="media">
                 <div class="media-body">
-                    <h4 style="display: inline-block" class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a></h4>
+                    <h4 style="display: inline-block" class="media-heading"><a href="/articleid/{{$article.Id}}">{{$article.Title}}</a>
+                    </h4>
                     <p style="display: inline-block;float: right;">{{date $article.Update_time "Y-m-d H:i"}}</p>
                     <div style="clear:both"></div>
-                    {{substr $article.Content 0 120 | html2str}}<a style="float: right;" href='{{urlfor "FrontController.ShowArticleById" ":id" $article.Id}}#disqus_thread'>评论</a>
+                    {{substr $article.Content 0 120 | html2str}}
+                    <a style="float: right;" href='{{urlfor "FrontController.ShowArticleById" ":id" $article.Id}}#disqus_thread'>评论</a>
                 </div>
             </div>
+            <br>
             {{end}}
         </ul>
-        <ul id="page"></ul>
-        <script type="text/javascript" src="/static/js/bootstrap-paginator.min.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                $("#page").bootstrapPaginator({
-                    currentPage: '{{.pageNo}}',
-                    totalPages: '{{.pageTotal}}',
-                    bootstrapMajorVersion: 3,
-                    onPageClicked: function (e, originalEvent, type, page) {
-                        window.location.href = "./?page=" + page
-                    }
-                });
-            });
-        </script>
+        {{if .pageNo}}
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-info" onclick="var page={{.pageNo}}-1;location.href='./?page='+page" {{if eq .pageNo 1}}disabled{{end}}>上一页</button>
+            <button type="button" class="btn btn-info" onclick="var page={{.pageNo}}+1;location.href='./?page='+page" {{if eq .pageNo .pageTotal}}disabled{{end}}>下一页</button>
+        </div>
         {{end}}
+        {{end}}
+        <hr>
     </div>
     <div class="col-xs-12 col-sm-4">
-        <p><b>About me:</b></p>
-        <pre>Probably a sucker.
-nsecgo at gmail.com</pre>
         {{if .tagsandcount}}
         <p><b>标签:</b></p>
         {{range $key,$count := .tagsandcount}}
-        <a href="/tag/{{$key}}" type="button" class="btn btn-success">
+        <a href="/tag/{{$key}}" type="button" class="btn btn-success btn-sm">
             {{$key}} <span class="badge">{{$count}}</span>
         </a>
         {{end}}

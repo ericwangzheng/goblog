@@ -18,6 +18,10 @@ func (c *AdminController) Add() {
 func (c *AdminController) DoAdd() {
 	var article models.Article
 	c.ParseForm(&article)
+	if strings.TrimSpace(article.Title) == "" {
+		c.Redirect("/",302)
+		return
+	}
 	uname, _ := c.GetSecureCookie(CookieSecret, "uname")
 	article.User = &models.User{Uname: uname}
 	article.Content = strings.Replace(article.Content, "<script>", "", -1)
