@@ -1,1 +1,1 @@
-cp conf/app.conf.example conf/app.conf
+`./goblog-linux-amd64`

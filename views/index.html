@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-xs-12 col-sm-8">
+        <br>
         {{if .tag}}
         <h4>贴有 " {{.tag}} " 标签的文章 :</h4><br>
         {{end}}
         {{if .search}}
         <h4>搜索 " {{.search}} " 的结果 :</h4><br>
         {{end}}
-        <br>
         {{if .articles}}
         <ul class="list-group">
             {{range $article := .articles}}
