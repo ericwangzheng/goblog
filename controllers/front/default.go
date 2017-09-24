@@ -17,11 +17,7 @@ func (c *FrontController) Index() {
 	articles, total := models.GetArticles(10, page)
 	c.Data["articles"] = articles
 	c.Data["pageNo"] = page
-	if a := total % 10; a == 0 {
-		c.Data["pageTotal"] = total / 10
-	} else {
-		c.Data["pageTotal"] = total/10 + 1
-	}
+	c.Data["totalCount"] = total
 	c.Data["tagsandcount"] = models.GetTagsAndCount()
 }
 
@@ -56,9 +52,9 @@ func (c *FrontController) ShowArticlesByTag() {
 	c.Data["title"] = "贴有 \"" + tag + "\" 标签的文章"
 }
 
-// @router /search/:key:string [get]
+// @router /search [get]
 func (c *FrontController) Search() {
-	key := strings.TrimSpace(c.GetString(":key"))
+	key := strings.TrimSpace(c.GetString("key"))
 	if len(key) == 0 {
 		c.Redirect("/", 302)
 	}
@@ -73,9 +69,10 @@ func (c *FrontController) Search() {
 	c.Data["search"] = key
 	c.Data["title"] = "搜索 \"" + key + "\" 的结果"
 	c.Data["pageNo"] = page
-	if a := total % 10; a == 0 {
-		c.Data["pageTotal"] = total / 10
-	} else {
-		c.Data["pageTotal"] = total/10 + 1
-	}
+	c.Data["totalCount"] = total
+}
+// @router /about [get]
+func (c *FrontController) About() {
+	c.Layout = "master.html"
+	c.TplName = "about.html"
 }

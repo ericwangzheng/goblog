@@ -23,12 +23,20 @@
             <br>
             {{end}}
         </ul>
-        {{if .pageNo}}
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-info" onclick="var page={{.pageNo}}-1;location.href='./?page='+page" {{if eq .pageNo 1}}disabled{{end}}>上一页</button>
-            <button type="button" class="btn btn-info" onclick="var page={{.pageNo}}+1;location.href='./?page='+page" {{if eq .pageNo .pageTotal}}disabled{{end}}>下一页</button>
-        </div>
-        {{end}}
+        <script src="/static/js/bootstrapPager.js"></script>
+        <script>
+            document.write(Pager({
+                totalCount: '{{.totalCount}}', //总条数为150
+                pageSize: 10,    //每页显示6条内容，默认10
+                buttonSize: 6,   //显示6个按钮，默认10
+                pageParam: 'page',   //页码的参数名为'p'，默认为'page'
+                className: 'pagination',    //分页的样式
+                prevButton: '上一页',       //上一页按钮
+                nextButton: '下一页',       //下一页按钮
+                firstButton: '首页',      //第一页按钮
+                lastButton: '末页',       //最后一页按钮
+            }));
+        </script>
         {{end}}
         <hr>
     </div>
