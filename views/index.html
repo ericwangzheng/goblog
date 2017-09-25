@@ -44,11 +44,14 @@
         {{if .tagsandcount}}
         <p><b>标签:</b></p>
         {{range $key,$count := .tagsandcount}}
-        <a href="/tag/{{$key}}" type="button" class="btn btn-success btn-sm">
-            {{$key}} <span class="badge">{{$count}}</span>
+        <a href="/tag/{{$key}}">
+            <button class="btn">
+                {{$key}} <span class="badge badge-secondary">{{$count}}</span>
+            </button>
         </a>
         {{end}}
         {{end}}
+        <hr>
     </div>
 </div>
 <script id="dsq-count-scr" src="//nsecgo.disqus.com/count.js" async></script>

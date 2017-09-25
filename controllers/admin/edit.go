@@ -99,5 +99,5 @@ func (c *AdminController) Delete() {
 		c.Redirect("/", 302)
 	}
 	models.DelArticleById(id)
-	c.Redirect(beego.URLFor("FrontController.Index", ":id", id), 302)
+	c.Redirect("/", 302)
 }
